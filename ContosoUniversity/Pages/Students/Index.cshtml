@@ -1,0 +1,81 @@
+﻿@page
+@model ContosoUniversity.Pages.Students.IndexModel
+
+@{
+	ViewData["Title"] = "Students";
+}
+
+<div class="index-tools">
+	<div class="index-left-side">
+		<h1>Students</h1>
+		<div class="create-button">
+			<a asp-page="Create" class="btn btn-primary">Create New</a>
+		</div>
+	</div>
+	<form asp-page="./Index" method="get">
+		<div>
+			<label for="SearchString">Поиск по иени:</label>
+			<input type="text" name="SearchString" id="SearchString" value="@Model.CurrentFilter" />
+			<input type="submit" value="Search" class="btn btn-primary" />
+			<a asp-page="./Index">Сбросить</a>
+		</div>
+	</form>
+</div>
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>
+				<a asp-page="./Index" asp-route-sortOrder="@Model.NameSort">@Html.DisplayNameFor(model => model.PLStudents[0].LastName)</a>
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.PLStudents[0].FirstName)
+			</th>
+			<th>
+				<a asp-page="./Index" asp-route-sortOrder="@Model.DateSort">@Html.DisplayNameFor(model => model.PLStudents[0].EnrollmentDate)</a>
+			</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model.PLStudents) {
+			<tr>
+				<td>
+					@Html.DisplayFor(modelItem => item.LastName)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.FirstName)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.EnrollmentDate)
+				</td>
+				<td>
+					<a asp-page="./Edit" asp-route-id="@item.ID">Edit</a> |
+					<a asp-page="./Details" asp-route-id="@item.ID">Details</a> |
+					<a asp-page="./Delete" asp-route-id="@item.ID">Delete</a>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
+
+@{
+	string prevDisabled = Model.PLStudents.HasPreviousPage ? "" : "disabled";
+	string nextDisabled = Model.PLStudents.HasNextPage ? "" : "disabled";
+}
+<a	asp-page="./Index"
+	asp-route-sortOrder="@Model.CurrentSort"
+	asp-route-pageIndex="@(Model.PLStudents.PageIndex - 1)"
+	asp-route-currentFilter="@Model.CurrentFilter"
+	class="btn btn-primary @prevDisabled"
+	>
+Prev
+</a>
+<a	asp-page="./Index"
+	asp-route-sortOrder="@Model.CurrentSort"
+	asp-route-pageIndex="@(Model.PLStudents.PageIndex + 1)"
+	asp-route-currentFilter="@Model.CurrentFilter"
+	class="btn btn-primary @nextDisabled"
+	>
+Next
+</a>

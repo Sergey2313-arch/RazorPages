@@ -1,0 +1,104 @@
+﻿@page
+@model ContosoUniversity.Pages.Enrollments.IndexModel
+
+@{
+    ViewData["Title"] = "Enrollments";
+}
+
+<h1>Enrollments</h1>
+
+<p>
+    <a asp-page="Create" class="btn btn-primary">Create New</a>
+</p>
+
+@* --- ФОРМА ПОИСКА И ВЫБОРА КОЛИЧЕСТВА ЗАПИСЕЙ --- *@
+<form asp-page="./Index" method="get" class="mb-3">
+    <div class="form-actions no-color d-flex align-items-center gap-3">
+        <div>
+            Поиск (Студент/Курс): <input type="text" name="searchString" value="@Model.CurrentFilter" />
+            <input type="submit" value="Search" class="btn btn-info btn-sm" /> |
+            <a asp-page="./Index">сброс фильтров</a>
+        </div>
+        <div>
+            Записей на странице:
+            <select name="pageSize" onchange="this.form.submit()" class="form-select-sm">
+                @foreach (var size in new int[] { 5, 10, 20, 50 })
+                {
+                    <option value="@size" selected="@(Model.CurrentPageSize == size)">@size</option>
+                }
+            </select>
+        </div>
+    </div>
+</form>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>
+                @* Ссылка для сортировки по Студенту *@
+                <a asp-page="./Index" asp-route-sortOrder="@Model.StudentSort" asp-route-currentFilter="@Model.CurrentFilter" asp-route-pageSize="@Model.CurrentPageSize">
+                    @Html.DisplayNameFor(model => model.Enrollment[0].Student)
+                </a>
+            </th>
+            <th>
+                @* Ссылка для сортировки по Курсу *@
+                <a asp-page="./Index" asp-route-sortOrder="@Model.CourseSort" asp-route-currentFilter="@Model.CurrentFilter" asp-route-pageSize="@Model.CurrentPageSize">
+                    @Html.DisplayNameFor(model => model.Enrollment[0].Course)
+                </a>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Enrollment[0].Grade)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Enrollment)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Student.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Course.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Grade)
+                </td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.EnrollmentID">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@item.EnrollmentID">Details</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.EnrollmentID">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@* --- КНОПКИ ПЕРЕКЛЮЧЕНИЯ СТРАНИЦ --- *@
+@{
+    var prevDisabled = !Model.Enrollment.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.Enrollment.HasNextPage ? "disabled" : "";
+}
+
+<div class="mt-3">
+    <a asp-page="./Index"
+           asp-route-sortOrder="@Model.CurrentSort"
+           asp-route-pageIndex="@(Model.Enrollment.PageIndex - 1)"
+           asp-route-currentFilter="@Model.CurrentFilter"
+           asp-route-pageSize="@Model.CurrentPageSize"
+           class="btn btn-outline-primary @prevDisabled">
+        Previous
+    </a>
+
+    <span class="mx-2">Page @Model.Enrollment.PageIndex of @Model.Enrollment.TotalPages</span>
+
+    <a asp-page="./Index"
+           asp-route-sortOrder="@Model.CurrentSort"
+           asp-route-pageIndex="@(Model.Enrollment.PageIndex + 1)"
+           asp-route-currentFilter="@Model.CurrentFilter"
+           asp-route-pageSize="@Model.CurrentPageSize"
+           class="btn btn-outline-primary @nextDisabled">
+        Next
+    </a>
+</div>
