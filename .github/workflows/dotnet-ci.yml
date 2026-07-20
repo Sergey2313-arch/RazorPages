@@ -1,0 +1,32 @@
+name: Contoso University .NET CI
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'ContosoUniversity/**'
+      - '.github/workflows/dotnet-ci.yml'
+  pull_request:
+    branches: [master]
+    paths:
+      - 'ContosoUniversity/**'
+      - '.github/workflows/dotnet-ci.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore
+        run: dotnet restore ContosoUniversity/ContosoUniversity.csproj
+
+      - name: Build
+        run: dotnet build ContosoUniversity/ContosoUniversity.csproj --configuration Release --no-restore
