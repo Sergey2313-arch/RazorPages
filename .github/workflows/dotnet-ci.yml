@@ -1,6 +1,7 @@
 name: Contoso University .NET CI
 
 on:
+  workflow_dispatch:
   push:
     branches: [master]
     paths:
