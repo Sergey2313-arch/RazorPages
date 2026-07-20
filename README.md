@@ -1,5 +1,7 @@
 # Contoso University — ASP.NET Core Razor Pages
 
+[![Contoso University .NET CI](https://github.com/Sergey2313-arch/RazorPages/actions/workflows/dotnet-ci.yml/badge.svg)](https://github.com/Sergey2313-arch/RazorPages/actions/workflows/dotnet-ci.yml)
+
 Учебное веб-приложение для управления данными университета, созданное на **ASP.NET Core Razor Pages и .NET 8**.
 
 Проект демонстрирует работу с реляционной моделью данных, Entity Framework Core, SQL Server, Razor Pages и CRUD-операциями.
@@ -50,7 +52,7 @@
 
 ```bash
 git clone https://github.com/Sergey2313-arch/RazorPages.git
-cd RazorPages
+cd RazorPages/ContosoUniversity
 dotnet restore
 dotnet ef database update
 dotnet run
